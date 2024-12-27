@@ -15,10 +15,8 @@ def sidebar():
 # Main Page with Sidebar Toggle
 @ui.page('/')
 def homepage():
-    # Top Navbar with Sidebar Toggle Button
-    with ui.row().classes('w-full items-center bg-blue-500 text-white p-4'):
-        ui.button(icon='menu', on_click=lambda: drawer.set_visibility(True)).classes('lg:hidden')
-        ui.label('My Website').classes('text-xl font-bold')
+    # Sidebar Toggle Button
+    ui.button(icon='menu', on_click=lambda: drawer.set_visibility(True)).classes('m-4')
 
     # Call the sidebar function
     sidebar()
