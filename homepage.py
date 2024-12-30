@@ -1,30 +1,37 @@
 from nicegui import ui
+from datetime import datetime
 
-
-# Sidebar Component
-def sidebar():
-    with ui.drawer(side='left') as drawer:  # Drawer opens from the left side
-        with ui.column().classes('w-64 h-full bg-gray-800 text-white p-4'):
-            ui.label('My Sidebar').classes('text-xl font-bold mb-4')
-            ui.link('🏠 Home', '/').classes('hover:underline p-2')
-            ui.link('ℹ️ About', '/about').classes('hover:underline p-2')
-            ui.link('📞 Contact', '/contact').classes('hover:underline p-2')
-            ui.button('Close', on_click=lambda: drawer.set_visibility(False)).classes('mt-auto bg-red-500')
-
-
-# Main Page with Sidebar Toggle
+# Define the main page layout
 @ui.page('/')
-def homepage():
-    # Sidebar Toggle Button
-    ui.button(icon='menu', on_click=lambda: drawer.set_visibility(True)).classes('m-4')
+def page_layout():
+    # HEADER
+    with ui.header(elevated=True).style('background-color: #3874c8').classes('items-center justify-between'):
+        ui.button(on_click=lambda: left_drawer.toggle(), icon='menu').props('flat color=white')
+        ui.label('HEADER').style('color: white; font-size: 20px;')
+        ui.button(on_click=lambda: right_drawer.toggle(), icon='menu').props('flat color=white')
 
-    # Call the sidebar function
-    sidebar()
+    # LEFT DRAWER
+    with ui.left_drawer(top_corner=True, bottom_corner=True).style('background-color: #d7e3f4') as left_drawer:
+        ui.label('Time Sheet')
+        ui.label('Time Sheet')
 
-    # Main content area
-    with ui.column().classes('p-4'):
-        ui.label('Welcome to My Website!').classes('text-2xl mt-4')
-        ui.label('This is the main content area.')
+    # RIGHT DRAWER
+    with ui.right_drawer(fixed=False).style('background-color: #ebf1fa').props('bordered') as right_drawer:
+        ui.label('RIGHT DRAWER')
+
+    # MAIN CONTENT
+    with ui.column().classes('w-full items-center'):
 
 
+        # Date Picker Section
+        today = datetime.today().strftime('%Y-%m-%d')
+        ui.date(value=today, on_change=lambda e: result.set_text(f'Selected date: {e.value}'))
+        result = ui.label('Selected date will appear here.')
+
+    # FOOTER
+    with ui.footer().style('background-color: #3874c8'):
+        ui.label('FOOTER').style('color: white; font-size: 16px;')
+
+
+# Run the app
 ui.run()
